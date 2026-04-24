@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as s}from"./chunks/framework.oqb-_ST4.js";const m=JSON.parse('{"title":"index","description":"","frontmatter":{"title":"index"},"headers":[],"relativePath":"posts/index.md","filePath":"posts/index.md"}'),n={name:"posts/index.md"};function a(o,r,i,d,c,p){return s(),t("div")}const x=e(n,[["render",a]]);export{m as __pageData,x as default};
