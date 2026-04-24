@@ -69,7 +69,7 @@ export default defineConfig<Theme>({
       ],
       comments: {
         enable: true,
-        serverURL:'https://vercel-git-main-wuyifan0203s-projects.vercel.app/'
+        serverURL:'https://api.zcservice.houlang.cloud/comment/d61a44c2da3e4bc7ac918311cbd7d9bf'
       },
       onLoadImage:'/vitepress-theme-sakurairo/outLoad.svg',
     },

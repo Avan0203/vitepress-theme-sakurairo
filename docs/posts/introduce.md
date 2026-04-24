@@ -4,9 +4,9 @@ cover: https://www.loliapi.com/acg/
 layout: page
 publish: 2024-02-25 11:29:00
 update: 2025-02-13 01:22:00
-tags: ['test', 'vitepress']
-prev: '/posts/film'
-next: '/posts/glsl/glsl'
+tags: ["test", "vitepress"]
+prev: "/posts/film"
+next: "/posts/glsl/glsl"
 ---
 
 # title test
@@ -36,27 +36,27 @@ next: '/posts/glsl/glsl'
 
 ## 在线图片
 
-![测试图片](<https://img.loliapi.cn/i/pc/img113.webp>)
+![测试图片](https://eo-img.loliapi.cn/i/pc/img496.webp)
 
 ```markdown
 //在线图片
-![测试图片](<https://img.loliapi.cn/i/pc/img113.webp>)
+![测试图片](https://esa-img.544521.xyz/i/pc/img496.webp)
 ```
 
 ## html 图片
 
-<img src="https://img.loliapi.cn/i/pc/img496.webp" alt="测试图片" style="width:100%" ></img>
+<img src="https://eo-img.loliapi.cn/i/pc/img113.webp" alt="测试图片" style="width:100%" ></img>
 
 ```markdown
 //html图片
-<img src="https://img.loliapi.cn/i/pc/img496.webp" alt="测试图片" style="width:100%" ></img>
+<img src="https://eo-img.loliapi.cn/i/pc/img113.webp" alt="测试图片" style="width:100%" ></img>
 ```
 
 # test Code
 
 ```js
 function hello() {
-    console.log('Hello, world!'); // [!code focus]
+  console.log("Hello, world!"); // [!code focus]
 }
 hello();
 ```
@@ -76,7 +76,7 @@ hello();
 - 测试3
 - 测试4
 
-## '*'
+## '\*'
 
 - 测试1
 - 测试2
@@ -126,7 +126,7 @@ iv. 测试4
 
 # Iframe
 
-<iframe width="100%" height="400" src="https://wuyifan0203.github.io/threejs-demo/src/shader/cloud.html" title="three.js demo display" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="400" src="https://avan0203.github.io/threejs-demo/src/shader/rainEffect.html" title="three.js demo display" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 # Math jax
 

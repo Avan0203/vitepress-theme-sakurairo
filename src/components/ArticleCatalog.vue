@@ -17,20 +17,21 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
-import * as tocbot from 'tocbot';
-
-
-tocbot.init({
-    tocSelector: '#toc-container',
-    contentSelector: '.article-body',
-    headingSelector: 'h1, h2, h3, h4, h5, h6',
-})
-
-onMounted(() => {
-    // tocbot.refresh();
-})
+import tocbot from 'tocbot';
 
 const tocHeight = ref('100px')
+
+onMounted(() => {
+    tocbot.init({
+        tocSelector: '#toc-container',
+        contentSelector: '.article-body',
+        headingSelector: 'h1, h2, h3, h4, h5, h6',
+        headingsOffset: 100,
+        scrollSmoothOffset: -100,
+        collapseDepth: 0,
+        scrollSmooth: true,
+    })
+})
 
 defineExpose({
     refresh(){
