@@ -1,7 +1,7 @@
-import { defineConfigWithTheme } from 'vitepress';
+import { defineConfig } from 'vitepress';
 import type { Theme } from '../../src/'
 
-export default defineConfigWithTheme<Theme>({
+export default defineConfig<Theme>({
   title: "vitepress-theme-sakurairo",
   description: "A VitePress Theme",
   outDir: '..//dist',
@@ -165,6 +165,13 @@ export default defineConfigWithTheme<Theme>({
     server: {
       port: 5300,
       host: '0.0.0.0',
-    }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          silenceDeprecations: ['legacy-js-api', 'import'],
+        },
+      },
+    },
   }
 })
