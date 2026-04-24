@@ -14,7 +14,7 @@ jobs:
     - name: Setup Node.js and pnpm
       uses: actions/setup-node@v3
       with:
-          node-version: '20.10.0' # 设置 nodejs 的版本
+          node-version: '22.x' # 设置 nodejs 的版本
           
     - name: Install pnpm
       run: npm install -g pnpm # 全局安装 pnpm
