@@ -46,9 +46,10 @@ const global = useStore('global');
 provide('global', global);
 global.setData(data);
 
+// 在脚本顶层立即初始化插件，确保路由钩子在应用启动时就设置好
+installThemePlugin();
 
 onMounted(() => {
-    installThemePlugin()
     document.body.style.backgroundImage = `url(${theme.global.background?.src()})`;
 })
 

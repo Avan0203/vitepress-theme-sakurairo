@@ -8,27 +8,21 @@
  * Copyright (c) 2024 by wuyifan0203 email: 1208097313@qq.com, All Rights Reserved.
  */
 
-import { useRouter } from 'vitepress'
+import { useBeforeRouterChange, useAfterRouterChange } from '../composables/useRouter';
 import nprogress from "nprogress";
 import "nprogress/nprogress.css";
 
 export function useNProgress() {
     if (typeof window === 'undefined') return;
 
-    const router = useRouter();
-
     nprogress.configure({ showSpinner: false });
-    const cacheOnBeforeRouteChange = router.onBeforeRouteChange;
-    const cacheAfterRouteChange = router.onAfterRouteChange 
-
-    router.onBeforeRouteChange = (to) => {
+    
+    // 使用统一的回调管理系统
+    useBeforeRouterChange(() => {
         nprogress.start();
-        cacheOnBeforeRouteChange && cacheOnBeforeRouteChange(to);
-    }
-
-    router.onAfterRouteChange  = (to) => {
+    });
+    
+    useAfterRouterChange(() => {
         nprogress.done();
-        cacheAfterRouteChange && cacheAfterRouteChange(to);
-    }
-
+    });
 }

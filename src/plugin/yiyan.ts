@@ -6,7 +6,7 @@
  * @FilePath: /vitepress-theme-sakurairo/src/plugin/yiyan.ts
  * Copyright (c) 2024 by wuyifan0203 email: 1208097313@qq.com, All Rights Reserved.
  */
-import { useRouter } from 'vitepress';
+import { useAfterRouterChange } from '../composables/useRouter';
 const apis = [
     "https://v1.hitokoto.cn/",
     "https://api.nmxc.ltd/yiyan/",
@@ -18,24 +18,20 @@ let dom: null | HTMLElement = null;
 function useYiYan() {
     dom = dom || document.querySelector('#yiyan');
 
-    const router = useRouter();
-    const cacheAfterRouteChange = router.onAfterRouteChanged;
-
     if (dom) {
         updateYiYan(dom);
     } else {
         console.log('cannot find #yiyan domElement when init!');
     }
 
-    router.onAfterRouteChanged = async (to) => {
+    // 使用统一的回调管理系统
+    useAfterRouterChange(async () => {
         if (dom) {
             updateYiYan(dom);
         } else {
             console.log('cannot find #yiyan domElement');
         }
-
-        cacheAfterRouteChange && cacheAfterRouteChange(to);
-    }
+    });
 }
 
 async function request(api: string) {

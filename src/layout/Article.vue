@@ -1,9 +1,9 @@
 <!--
  * @Author: wuyifan0203 1208097313@qq.com
  * @Date: 2024-02-21 15:06:46
- * @LastEditors: wuyifan0203 1208097313@qq.com
- * @LastEditTime: 2024-05-28 11:06:53
- * @FilePath: /vitepress-theme-sakurairo/src/layout/Article.vue
+ * @LastEditors: wuyifan wuyifan@udschina.com
+ * @LastEditTime: 2026-04-27 11:41:48
+ * @FilePath: \vitepress-theme-sakurairo\src\layout\Article.vue
  * Copyright (c) 2024 by wuyifan0203 email: 1208097313@qq.com, All Rights Reserved.
 -->
 <template>
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { Content, useData, withBase, } from 'vitepress';
-import { ComputedRef, computed, onMounted, ref } from 'vue';
+import { ComputedRef, computed, nextTick, onMounted, ref } from 'vue';
 import { DefaultPageFormatter, Theme } from '../types';
 import Pagination from '../components/Pagination.vue';
 import ArticleFooter from '../components/ArticleFooter.vue';
@@ -89,14 +89,28 @@ const updatePageViews = async () => {
 
 const updateTocHeight = () => {
     if (layout.value === 'page') {
-        if (articleRef.value && catalogRef.value) {
-            let height = articleRef.value.clientHeight;
-            catalogRef.value.updateHeight(height);
-            console.log(height);
-            catalogRef.value.refresh();
-        } else {
-            console.warn('set tocbot height fail!');
-        }
+        nextTick(() => {
+            if (articleRef.value && catalogRef.value) {
+                let height = articleRef.value.clientHeight;
+
+                if (typeof catalogRef.value.updateHeight === 'function') {
+                    catalogRef.value.updateHeight(height);
+                } else {
+                    console.error('catalogRef.updateHeight is not a function');
+                }
+
+                if (typeof catalogRef.value.refresh === 'function') {
+                    catalogRef.value.refresh();
+                    console.log('refresh called');
+                } else {
+                    console.error('catalogRef.refresh is not a function');
+                }
+            } else {
+                console.warn('set tocbot height fail!');
+            }
+        });
+    } else {
+        console.log('Layout is not page, skip updateTocHeight');
     }
 }
 
@@ -219,7 +233,7 @@ const useComment = computed(() => {
                 position: absolute !important;
                 top: 480px;
                 right: calc((100% - 950px - 250px) / 2);
-                z-index: 0;
+                z-index: 10;
                 padding-top: 10px;
                 padding-bottom: 10px;
                 width: 200px;

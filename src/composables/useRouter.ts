@@ -7,64 +7,92 @@
  * Copyright (c) 2024 by wuyifan0203 email: 1208097313@qq.com, All Rights Reserved.
  */
 import { useRouter } from 'vitepress';
+import { watch, onMounted } from 'vue';
 
-const beforeCallbackMap: { [key: string]: Function } = {};
+const beforeCallbackList: Function[] = [];
+let beforeHookInitialized = false;
+
 const useBeforeRouterChange = (callback: Function) => {
-    if (Object.keys(beforeCallbackMap).length === 0) {
+    beforeCallbackList.push(callback);
+    
+    if (!beforeHookInitialized) {
+        beforeHookInitialized = true;
         const router = useRouter();
         const cacheBeforeChange = router.onBeforeRouteChange;
+        
         router.onBeforeRouteChange = async (to: string) => {
-            for (const key in beforeCallbackMap) {
-                await beforeCallbackMap[key](to);
+            // 执行所有注册的回调
+            for (const callback of beforeCallbackList) {
+                try {
+                    await callback(to);
+                } catch (error) {
+                    console.error('Error in beforeRouteChange callback:', error);
+                }
             }
+            // 执行原始钩子
             cacheBeforeChange && cacheBeforeChange(to);
         }
     }
-    // 不用数组因为没法去重
-    beforeCallbackMap[callback.toString()] = callback;
-
-    console.log(beforeCallbackMap, 'callbackMap');
-
 }
 
-const afterCallbackMap: { [key: string]: Function } = {};
-const useAfterRouterChange = (callback: Function) => {
-    if (Object.keys(afterCallbackMap).length === 0) {
-        const router = useRouter();
-        const cacheAfterChange = router.onAfterRouteChanged;
-        router.onAfterRouteChanged = async (to: string) => {
-            for (const key in afterCallbackMap) {
-                await afterCallbackMap[key](to);
+const afterCallbackList: Function[] = [];
+let afterWatchInitialized = false;
+let routerInstance: any = null;
+
+const initRouteWatcher = () => {
+    if (afterWatchInitialized || !routerInstance) return;
+    
+    console.log('Initializing route watcher...');
+    afterWatchInitialized = true;
+    
+    // 使用 watch 监听 route.path 变化
+    watch(
+        () => routerInstance.route.path,
+        async (newPath, oldPath) => {
+            // 跳过初始加载（oldPath 为空字符串）
+            if (!oldPath) {
+                console.log('Initial load, skip callback execution');
+                return;
             }
-            cacheAfterChange && cacheAfterChange(to);
+            
+            console.log('=== Route changed ===');
+            console.log('From:', oldPath, 'To:', newPath);
+            console.log('Callbacks count:', afterCallbackList.length);
+            
+            // 执行所有注册的回调
+            for (let i = 0; i < afterCallbackList.length; i++) {
+                const cb = afterCallbackList[i];
+                try {
+                    console.log(`Executing callback [${i}]:`, cb.name || 'anonymous');
+                    await cb(newPath);
+                    console.log(`Callback [${i}] completed`);
+                } catch (error) {
+                    console.error(`Error in callback [${i}]:`, error);
+                }
+            }
+            
+            console.log('All callbacks executed');
         }
+    );
+    
+    console.log('Route watcher initialized successfully');
+};
+
+const useAfterRouterChange = (callback: Function) => {
+    afterCallbackList.push(callback);
+    console.log('Registered after route change callback, total:', afterCallbackList.length);
+    
+    // 获取 router 实例
+    if (!routerInstance) {
+        routerInstance = useRouter();
     }
-    // 不用数组因为没法去重
-    afterCallbackMap[callback.toString()] = callback;
+    
+    // 在 onMounted 中初始化 watch，确保在正确的 Vue 上下文中
+    if (typeof window !== 'undefined') {
+        onMounted(() => {
+            initRouteWatcher();
+        });
+    }
 }
-
-
 
 export { useBeforeRouterChange, useAfterRouterChange }
-
-// 另一种写法，
-
-// const a = {
-//     useBeforeRouterChange(callback: Function) {
-//         const router = useRouter();
-//         const cacheBeforeChange = router.onBeforeRouteChange;
-//         router.onBeforeRouteChange = async (to: string) => {
-//             for (const func of callbackList) {
-//                 await func(to);
-//             }
-//             cacheBeforeChange && cacheBeforeChange(to);
-//         }
-//         const fn = (callback: Function) => {
-//             callbackList.push(callback);
-//         };
-//         fn(callback);
-//         this.useBeforeRouterChange = fn;
-//     }
-// }
-
-// export { a }
